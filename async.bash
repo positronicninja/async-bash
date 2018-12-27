@@ -41,7 +41,7 @@ setTimeout() {
   }
 
   {
-  sleep ${after}
+  sleep "${after}"
   $command
   } &
 
@@ -51,7 +51,7 @@ setTimeout() {
 
   read -d " " -a __kunk__ <<< "${JOB_IDS[$(( ${#JOB_IDS[@]} - 1))]}"
 
-  echo ${__kunk__}
+  echo "${__kunk__[*]}"
 
   : $(( JOBS++ ))
 
@@ -83,7 +83,7 @@ setInterval() {
   }
 
   {
-  while sleep ${after};do
+  while sleep "${after}";do
     $command
   done
   } &
@@ -92,7 +92,7 @@ setInterval() {
 
   read -d " " -a __kunk__ <<< "${JOB_IDS[$(( ${#JOB_IDS[@]} - 1))]}"
 
-  echo ${__kunk__}
+  echo "${__kunk__[*]}"
 
   : $(( JOBS++ ))
 }
@@ -125,7 +125,7 @@ killJob() {
   for sig in ${__al__signals};do
 
     [[ ! $sig =~ ^[[:digit:]]+\)$ ]] && {
-    [[ $signal == $sig ]] && {
+    [[ $signal == "$sig" ]] && {
       isSig=1;
       break;
     }
@@ -140,7 +140,7 @@ killJob() {
 
 
 
-  for job in ${JOB_IDS[@]};do
+  for job in "${JOB_IDS[@]}";do
 
   # increment job to 1 since array index starts from 0
   read -d " " -a __kunk__ <<< "${JOB_IDS[$job]}"
@@ -150,19 +150,19 @@ killJob() {
 
     read -d " " -a __kunk__ <<< "${JOB_IDS[$job]}"
 
-    kill -${signal} %${__kunk__}
+    kill -${signal} %"${__kunk__[*]}"
 
     local status=$?
 
     (( status != 0 )) && {
 
 
-    printf "cannot kill %s %d\n" "${JOB_IDS[$job]}" "${__kunk__}"
+    printf "cannot kill %s %d\n" "${JOB_IDS[$job]}" "${__kunk__[*]}"
 
     return 1;
     }
 
-    printf "%d killed with %s\n" "${__kunk__}" "${signal}"
+    printf "%d killed with %s\n" "${__kunk__[*]}" "${signal}"
 
     return 0;
   }
@@ -226,8 +226,8 @@ async() {
 
   read -d " " -a __kunk__ <<< "${JOB_IDS[$(( ${#JOB_IDS[@]} - 1))]}"
 
-  echo ${__kunk__}
 
+  echo "${__kunk__[*]}"
 
   : $(( JOBS++ ))
 
@@ -260,7 +260,7 @@ parallel() {
   return 1;
   }
 
-   [[ "$(type -t $finalFunc)" != "function" ]] && {
+   [[ "$(type -t "$finalFunc")" != "function" ]] && {
    printf "%s\n" "${finalFunc} is not of type { function }"
    return 1;
    }
@@ -277,7 +277,7 @@ parallel() {
 
   }
 
-  declare __fArray+=( ${__arr} )
+  declare __fArray+=( "${__arr}" )
   done
 
   unset __arr
@@ -321,8 +321,8 @@ parallel() {
 
   read -d " " -a __kunk__ <<< "${JOB_IDS[$(( ${#JOB_IDS[@]} - 1))]}"
 
-  echo ${__kunk__}
 
+  echo "${__kunk__[*]}"
 
   : $(( JOBS++ ))
 }
