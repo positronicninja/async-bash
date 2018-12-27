@@ -24,7 +24,8 @@ setTimeout() {
 
   #declare -F $comm &>/dev/null
 
-  local _isDef=$(type -t ${comm})
+  local _isDef
+  _isDef=$(type -t "${comm}")
 
   if [[ -z "${_isDef}" ]];then
   printf "%s\n" "\"${command}\" is not of type { function, command} "
@@ -60,12 +61,13 @@ setInterval() {
 
   local command="$1"
   local after="$2"
+  local _isDef
 
   read -d " " comm <<<"${command}"
 
 
 
-  local _isDef=$(type -t ${comm})
+  _isDef=$(type -t "${comm}")
 
   if [[ -z "${_isDef}" ]];then
   printf "%s\n" "\"${command}\" is not of type { function, command} "
@@ -116,8 +118,10 @@ killJob() {
   }
   } || {
   # for loop worked better than read line in this case
-  local __al__signals=$(kill -l);
+  local __al__signals
   local isSig=0;
+
+  __al__signals=$(kill -l);
   for sig in ${__al__signals};do
 
     [[ ! $sig =~ ^[[:digit:]]+\)$ ]] && {
@@ -247,8 +251,9 @@ parallel() {
 
   read -d " " __cmd <<<"${mainFunc}"
 
-  local _isDef=$(type -t ${__cmd})
 
+  local _isDef
+  _isDef=$(type -t "${__cmd}")
 
    [[ -z $_isDef ]] && {
   printf "%s\n" "${__cmd} is not of type { function , alias , builtin or file }"
@@ -262,7 +267,8 @@ parallel() {
 
   for __arr in ${funcArray};do
 
-  local __isfunc=$(type -t ${__arr})
+  local __isfunc
+  __isfunc=$(type -t "${__arr}")
 
   [[ $__isfunc != "function" ]] && {
 
