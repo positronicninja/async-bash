@@ -20,7 +20,7 @@ setTimeout() {
   local command="$1"
   local after="$2"
 
-  read -d " " comm <<<"${command}"
+  read -dr " " comm <<<"${command}"
 
   #declare -F $comm &>/dev/null
 
@@ -49,7 +49,7 @@ setTimeout() {
 
 
 
-  read -d " " -a __kunk__ <<< "${JOB_IDS[$(( ${#JOB_IDS[@]} - 1))]}"
+  read -dr " " -a __kunk__ <<< "${JOB_IDS[$(( ${#JOB_IDS[@]} - 1))]}"
 
   echo "${__kunk__[*]}"
 
@@ -63,9 +63,9 @@ setInterval() {
   local after="$2"
   local _isDef
 
-  read -d " " comm <<<"${command}"
 
 
+  read -dr " " comm <<<"${command}"
 
   _isDef=$(type -t "${comm}")
 
@@ -90,7 +90,7 @@ setInterval() {
 
   JOB_IDS+=( "${JOBS} ${command}" )
 
-  read -d " " -a __kunk__ <<< "${JOB_IDS[$(( ${#JOB_IDS[@]} - 1))]}"
+  read -dr " " -a __kunk__ <<< "${JOB_IDS[$(( ${#JOB_IDS[@]} - 1))]}"
 
   echo "${__kunk__[*]}"
 
@@ -143,12 +143,12 @@ killJob() {
   for job in "${JOB_IDS[@]}";do
 
   # increment job to 1 since array index starts from 0
-  read -d " " -a __kunk__ <<< "${JOB_IDS[$job]}"
+  read -dr " " -a __kunk__ <<< "${JOB_IDS[$job]}"
 
   (( __kunk__ == jobToKill )) && {
 
 
-    read -d " " -a __kunk__ <<< "${JOB_IDS[$job]}"
+    read -dr " " -a __kunk__ <<< "${JOB_IDS[$job]}"
 
     kill -${signal} %"${__kunk__[*]}"
 
@@ -189,7 +189,7 @@ async() {
   for _c in "${__temp[@]}";do
 
 
-  read -d " " comm <<<"${_c}"
+  read -dr " " comm <<<"${_c}"
 
   type "${comm}" &>/dev/null
 
@@ -224,7 +224,7 @@ async() {
 
   JOB_IDS+=( "${JOBS} ${command}" )
 
-  read -d " " -a __kunk__ <<< "${JOB_IDS[$(( ${#JOB_IDS[@]} - 1))]}"
+  read -dr " " -a __kunk__ <<< "${JOB_IDS[$(( ${#JOB_IDS[@]} - 1))]}"
 
 
   echo "${__kunk__[*]}"
@@ -249,8 +249,8 @@ parallel() {
   return 1;
   }
 
-  read -d " " __cmd <<<"${mainFunc}"
 
+  read -dr " " __cmd <<<"${mainFunc}"
 
   local _isDef
   _isDef=$(type -t "${__cmd}")
@@ -319,8 +319,8 @@ parallel() {
 
   JOB_IDS+=( "${JOBS} ${command}" )
 
-  read -d " " -a __kunk__ <<< "${JOB_IDS[$(( ${#JOB_IDS[@]} - 1))]}"
 
+  read -dr " " -a __kunk__ <<< "${JOB_IDS[$(( ${#JOB_IDS[@]} - 1))]}"
 
   echo "${__kunk__[*]}"
 
